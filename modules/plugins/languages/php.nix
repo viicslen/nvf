@@ -80,7 +80,37 @@
               "--stdio"
             },
           ''
-        }
+          }
+          init_options = {
+            ${
+              if cfg.lsp.intelephense.licenseKey != null
+              then ''
+                licenseKey = "${cfg.lsp.intelephense.licenseKey}",
+              ''
+              else ''
+            }
+            ${
+              if cfg.lsp.intelephense.globalStoragePath != null
+              then ''
+                globalStoragePath = "${cfg.lsp.intelephense.globalStoragePath}",
+              ''
+              else ''
+            }
+            ${
+              if cfg.lsp.intelephense.storagePath != null
+              then ''
+                storagePath = "${cfg.lsp.intelephense.storagePath}",
+              ''
+              else ''
+            }
+            ${
+              if cfg.lsp.intelephense.clearCache
+              then ''
+                clearCache = true,
+              ''
+              else ''
+            }
+          }
         }
       '';
     };
@@ -108,6 +138,25 @@ in {
         example = ''[lib.getExe pkgs.jdt-language-server " - data " " ~/.cache/jdtls/workspace "]'';
         type = either package (listOf str);
         default = servers.${cfg.lsp.server}.package;
+      };
+
+      intelephense = {
+        licenseKey = mkOption {
+          description = "Intelephense license key";
+          type = str;
+        };
+        globalStoragePath = mkOption {
+          description = "Intelephense global storage path";
+          type = str;
+        };
+        storagePath = mkOption {
+          description = "Intelephense storage path";
+          type = str;
+        };
+        clearCache = mkOption {
+          description = "Clear Intelephense cache";
+          type = bool;
+        };
       };
     };
   };
